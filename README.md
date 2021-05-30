@@ -20,6 +20,7 @@ kubectl get service -n accounts
 2. Create a self-signed certificate and key for the accounts-svc Service:
 ```
 openssl req -nodes -new -x509 -keyout accounts.key -out accounts.crt -subj "/CN=accounts.svc"
+# check the files after you created them. 
 ```
 3. Create a Secret file to store the certificate and key:
 ```
@@ -80,3 +81,40 @@ vi accounts-tls-certs-secret.yml
 ```
 kubectl create -f accounts-tls-certs-secret.yml
 ```
+### Create an Ingress on Top of the Service That Configures TLS Termination
+1. Create a YAML manifest for the Ingress:
+
+vi accounts-tls-ingress.yml
+
+2. Paste in the following YAML:
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: accounts-tls
+  namespace: accounts
+spec:
+  tls:
+  - hosts:
+      - accounts.svc
+    secretName: accounts-tls-certs
+  rules:
+  - host: accounts.svc
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: accounts-svc
+            port:
+              number: 80
+              Press Escape and enter :wq.
+
+3. Create the Ingress:
+
+kubectl create -f accounts-tls-ingress.yml
+
+4. Verify that the Ingress is appropriately mapping to the backend:
+
+kubectl describe ingress accounts-tls -n accounts
