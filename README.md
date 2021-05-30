@@ -1,6 +1,6 @@
 # Add-TLS-to-a-Kubernetes-Service-with-Ingress
 
-##Introduction
+## Introduction
 - Your company, SecuriCorp, is using Kubernetes to run a variety of applications. Recently, hackers have been trying various techniques to break into the Kubernetes cluster and steal data.
 
 - Your developers have built a Service called accounts-svc that provides user account data, but the Service itself uses an unencrypted HTTP protocol. This makes communications with that service vulnerable to various forms of attack.
@@ -9,7 +9,7 @@
 
 **Note:** The cluster does not have any Ingress controllers set up. However, for now, all you need to do is implement the Ingress configuration
 
-##Solution
+## Solution
 
 ### Generate Self-Signed Certificates for the Service and Store Them in a Secret
 
